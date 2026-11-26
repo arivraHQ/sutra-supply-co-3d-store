@@ -35,6 +35,7 @@ import type {
   ProductSceneHandle,
 } from "./three/ProductScene";
 import { ProductFallback2D } from "./ProductFallback2D";
+import { shouldUse2DFallback } from "@/utils/device";
 
 const ProductScene = dynamic(
   () => import("./three/ProductScene").then((m) => m.ProductScene),
@@ -47,20 +48,6 @@ const PRINT_FONTS = [
   { id: "onest", label: "Onest Sans", css: "Onest, sans-serif" },
   { id: "serif", label: "Editorial Serif", css: "Georgia, serif" },
 ] as const;
-
-function detectLowEnd(): boolean {
-  if (typeof navigator === "undefined") return false;
-  const cores = navigator.hardwareConcurrency ?? 8;
-  const mem =
-    (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
-  if (cores <= 4 || mem <= 4) return true;
-  try {
-    const c = document.createElement("canvas");
-    return !(c.getContext("webgl2") || c.getContext("webgl"));
-  } catch {
-    return true;
-  }
-}
 
 function resolveCanvasFont(fontId: (typeof PRINT_FONTS)[number]["id"]): string {
   if (typeof window === "undefined") return "sans-serif";
@@ -156,7 +143,7 @@ export function ProductConfigurator({
   const [decalRotation, setDecalRotation] = useState(0);
 
   useEffect(() => {
-    setUseFallback2D(detectLowEnd());
+    setUseFallback2D(shouldUse2DFallback());
     setHasCheckedDevice(true);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);

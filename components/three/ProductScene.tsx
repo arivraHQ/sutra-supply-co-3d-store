@@ -97,7 +97,7 @@ function ProductStage({
 }: ProductSceneProps & {
   captureRef: React.MutableRefObject<(() => string | undefined) | null>;
 }) {
-  const { camera, gl, scene, invalidate } = useThree();
+  const { camera, gl, scene, size, invalidate } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const teeGroupRef = useRef<THREE.Group>(null);
   const isTransitioningRef = useRef(false);
@@ -198,10 +198,16 @@ function ProductStage({
       needsAnotherFrame = true;
     }
 
-    // Camera preset transition
+    // Camera preset transition (pulls slightly further back on narrow mobile viewports)
     if (isTransitioningRef.current && controlsRef.current) {
       const view = PRESET_VIEWS[cameraPreset];
-      const desiredPos = new THREE.Vector3(...view.pos);
+      const aspect = size.width / Math.max(size.height, 1);
+      const mobileScale = aspect < 0.9 ? 1.24 : 1;
+      const desiredPos = new THREE.Vector3(
+        view.pos[0],
+        view.pos[1],
+        view.pos[2] * mobileScale,
+      );
       const desiredTarget = new THREE.Vector3(...view.target);
       const alpha = reducedMotion ? 1 : Math.min(1, delta * 7);
 

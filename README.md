@@ -12,7 +12,7 @@ A tactile 3D concept store for **Sutra Supply Co.** (fictional Kanpur streetwear
 
 - **3D Clothes Rail (`/`)**: Continuous float progress `p` damped with `maath`, `smoothstep` `85°` side-view compression, velocity-driven hanger pendulum swing, wheel / drag / keyboard navigation, category filters (`All`, `Regular`, `Oversized`, `Graphic`), and a `600ms` pull-forward transition into the product viewer.
 - **3D Product Viewer (`/product/[slug]`) & Studio (`/studio`)**: `frameloop="demand"` idle optimization, bounded `OrbitControls`, `Front / Back / Detail` camera presets, live colorway lerping, and real-time `<Decal>` text/logo placement (`Left Chest`, `Center Chest`, `Back`) with client-side image scaling (`<= 1024px`).
-- **Progressive Enhancement & Fallback**: Automatic 2D horizontal rail and static gallery fallback for low-power hardware (`hardwareConcurrency <= 4`, `deviceMemory <= 4`, or missing WebGL), plus full server-rendered DOM HTML for SEO and accessibility.
+- **Progressive Enhancement & Fallback**: Automatic 2D horizontal rail and static gallery fallback for constrained hardware (`hardwareConcurrency <= 2`, `deviceMemory <= 2`, or missing WebGL), plus full server-rendered DOM HTML for SEO and accessibility.
 - **WhatsApp Checkout & Bulk Enquiries**: Zustand-persisted cart capturing `160×160` canvas thumbnails and generating prefilled `wa.me` order summaries.
 
 ## Setup
@@ -84,7 +84,7 @@ tokens/
 - **Tactile store-wall palette**: Warm limestone wall (`#E8E4DA`), ink (`#151515`), signal orange (`#FF4B1F`), steel rod (`#9C9C98`), wood hanger (`#B58B5A`), zero `border-radius`, `1.5px` ink rules, and a `5%` SVG noise grain overlay.
 - **Physical rail kinematics**: Continuous float progress `p` damped via `maath` `easing.damp`, smoothstep side-view rotation (`85°`) and x-stack compression, velocity-driven hanger pendulum swing (`rotationZ`), and a `600ms` pull-forward transition on clicking the active tee.
 - **Zero-HDR / Zero-shadow-map lighting**: Custom `<Environment>` built exclusively from `<Lightformer>` rects and blurred radial-gradient canvas planes for wall shadows.
-- **Demand rendering & fallback**: Product pages run `frameloop="demand"` and stop idle rotation permanently upon user interaction; devices with `hardwareConcurrency <= 4`, `deviceMemory <= 4`, or failed WebGL seamlessly fall back to 2D rails and static galleries.
+- **Demand rendering & fallback**: Product pages run `frameloop="demand"` and stop idle rotation permanently upon user interaction; devices with `hardwareConcurrency <= 2`, `deviceMemory <= 2`, or failed WebGL seamlessly fall back to 2D rails and static galleries.
 - **Client-side artwork privacy**: Custom PNG/JPG/SVG uploads (`<= 3 MB`) are resized to `<= 1024px` in an offscreen canvas and never leave the browser; checkout pre-fills a structured `wa.me` WhatsApp order.
 
 ---

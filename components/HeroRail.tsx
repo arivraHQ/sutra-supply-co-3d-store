@@ -25,29 +25,12 @@ import {
 import { MOTION, type TeeColorId } from "@/tokens/theme";
 import { CanvasErrorBoundary } from "./three/CanvasErrorBoundary";
 import { RailFallback2D } from "./RailFallback2D";
+import { shouldUse2DFallback } from "@/utils/device";
 
 const RailScene = dynamic(
   () => import("./three/RailScene").then((m) => m.RailScene),
   { ssr: false },
 );
-
-function detectLowEndDevice(): boolean {
-  if (typeof navigator === "undefined") return false;
-  const cores = navigator.hardwareConcurrency ?? 8;
-  const mem =
-    (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
-  if (cores <= 4 || mem <= 4) return true;
-  try {
-    const canvas = document.createElement("canvas");
-    const gl =
-      canvas.getContext("webgl2") ||
-      canvas.getContext("webgl") ||
-      canvas.getContext("experimental-webgl");
-    return !gl;
-  } catch {
-    return true;
-  }
-}
 
 function RailLoader() {
   return (
@@ -91,7 +74,7 @@ export function HeroRail() {
     colorOverrides[activeProduct.id] ?? activeProduct.defaultColor;
 
   useEffect(() => {
-    setUseFallback2D(detectLowEndDevice());
+    setUseFallback2D(shouldUse2DFallback());
     setHasCheckedDevice(true);
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
